@@ -3,13 +3,30 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      apiResponse: ""
+    }
+  }
+
+  callAPI() {
+    fetch('https://immense-bastion-23257.herokuapp.com/api')
+      .then(res => res.text())
+      .then(res => this.setState({ apiResponse: res }))
+  }
+
+  componentDidMount() {
+    this.callAPI();
+  }
+  
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            {this.state.apiResponse}  
           </p>
           <a
             className="App-link"
