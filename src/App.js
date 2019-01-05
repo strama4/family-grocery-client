@@ -11,7 +11,7 @@ class App extends Component {
   }
 
   callAPI() {
-    fetch('https://immense-bastion-23257.herokuapp.com/api')
+    fetch('https://family-grocery-api.herokuapp.com/api')
       .then(res => res.text())
       .then(res => this.setState({ apiResponse: res }))
   }
