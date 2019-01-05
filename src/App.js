@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Link, Route } from 'react-router-dom';
 import './App.css';
+import Landing from './pages/Landing';
+import Lists from './pages/Lists';
+import ListView from './components/ListView';
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +14,7 @@ class App extends Component {
   }
 
   callAPI() {
-    fetch('https://family-grocery-api.herokuapp.com/api')
+    fetch('http://family-grocery-api.herokuapp.com/lists')
       .then(res => res.text())
       .then(res => this.setState({ apiResponse: res }))
   }
@@ -21,22 +24,18 @@ class App extends Component {
   }
   
   render() {
+    const lists = this.state.apiResponse;
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            {this.state.apiResponse}  
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <main className="container">
+          {/* stick in a nav here */}
+          <Link to="/lists">Lists</Link>
+        </main>
+
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/lists" render={() => <Lists lists={lists} />} />
+        <Route path="/lists/:id" render={(props) => <ListView lists={lists} {...props}/>} />
       </div>
     );
   }
