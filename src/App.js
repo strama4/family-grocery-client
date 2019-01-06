@@ -4,6 +4,7 @@ import './App.css';
 import Landing from './pages/Landing';
 import Lists from './pages/Lists';
 import ListView from './components/ListView';
+import SignUp from './pages/SignUp';
 
 class App extends Component {
   constructor(props) {
@@ -30,12 +31,15 @@ class App extends Component {
       <div className="App">
         <main className="container">
           {/* stick in a nav here */}
+          <Link to="/">Home</Link>
+          <Link to="/users/signup">Sign Up</Link>
           <Link to="/lists">Lists</Link>
         </main>
 
         <Route exact path="/" component={Landing} />
         <Route exact path="/lists" render={() => <Lists lists={lists} />} />
         <Route path="/lists/:id" render={(props) => <ListView lists={lists} {...props}/>} />
+        <Route path="/users/signup" component={SignUp} />
       </div>
     );
   }
