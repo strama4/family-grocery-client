@@ -38,7 +38,7 @@ class SignUp extends React.Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
-            return <Redirect to='/' />
+            return <Redirect to='/users/login' />
         }
     }
 
@@ -50,9 +50,13 @@ class SignUp extends React.Component {
                 password: '',
                 confirmPassword: ''
             })
-        }
-        else {
-            fetch('http://localhost:5000/users/create', {
+        } else if (this.state.email.trim() === '') {
+            alert('You must provide an email address');
+            this.setState({
+                email: ''
+            });
+        } else {
+            fetch('http://localhost:5000/users/register', {
                 method: "POST",
                 headers: {
                     'Content-type': 'application/json'
@@ -65,6 +69,7 @@ class SignUp extends React.Component {
             })
             .then(result => {
                 if (result.status === 200) {
+                    console.log(result.json().then(res => console.log(res)))
                     this.handleRedirect();
                 }
                 if (result.status === 500) {
@@ -72,7 +77,7 @@ class SignUp extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err);
+                console.log('Client side', err);
             })
         }
     }

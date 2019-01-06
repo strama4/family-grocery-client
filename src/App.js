@@ -5,6 +5,8 @@ import Landing from './pages/Landing';
 import Lists from './pages/Lists';
 import ListView from './components/ListView';
 import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
+import AuthenticateComponent from './components/AuthenticateComponent';
 
 class App extends Component {
   constructor(props) {
@@ -32,14 +34,18 @@ class App extends Component {
         <main className="container">
           {/* stick in a nav here */}
           <Link to="/">Home</Link>
-          <Link to="/users/signup">Sign Up</Link>
+          <Link to="/users/register">Sign Up</Link>
+          <Link to="/users/login">Sign In</Link>
           <Link to="/lists">Lists</Link>
         </main>
 
         <Route exact path="/" component={Landing} />
-        <Route exact path="/lists" render={() => <Lists lists={lists} />} />
+        <AuthenticateComponent>
+          <Route exact path="/lists" render={() => <Lists lists={lists} />} />
+        </AuthenticateComponent>
         <Route path="/lists/:id" render={(props) => <ListView lists={lists} {...props}/>} />
-        <Route path="/users/signup" component={SignUp} />
+        <Route path="/users/register" component={SignUp} />
+        <Route path="/users/login" component={SignIn} />
       </div>
     );
   }
