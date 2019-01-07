@@ -5,7 +5,7 @@ class ListView extends React.Component {
     
     render() {
 
-        if (!this.props.lists) return <p>Loading</p>; 
+        if (!this.props.lists) return <p>Loading</p>
         
         const listId = parseInt(this.props.match.params.id);
         const list = JSON.parse(this.props.lists).find(list => list.id === listId);

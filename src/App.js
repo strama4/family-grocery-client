@@ -1,29 +1,42 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Redirect } from 'react-router-dom';
+import { Switch } from 'react-router';
 import './App.css';
 import Landing from './pages/Landing';
 import Lists from './pages/Lists';
 import ListView from './components/ListView';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
+import LogOut from './components/SignOut';
 import AuthenticateComponent from './components/AuthenticateComponent';
+import { getJWT } from './helpers/jwt';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiResponse: ""
+      apiResponse: "",
+      user: undefined
     }
   }
 
-  callAPI() {
-    fetch('http://family-grocery-api.herokuapp.com/lists')
-      .then(res => res.text())
-      .then(res => this.setState({ apiResponse: res }))
+  async callAPI() {
+    const listData = await fetch('http://localhost:5000/lists')
+                      .then(res => res.text())
+                      .then(res => JSON.parse(res));
+
+    const userData = listData.filter(list => list.userId === this.user)
+  }
+
+  signOut = () => {
+    localStorage.removeItem('JWT');
+    this.setState({ user: undefined }, () => console.log(this.state))
   }
 
   componentDidMount() {
     this.callAPI();
+
+    
   }
   
   render() {
@@ -37,15 +50,24 @@ class App extends Component {
           <Link to="/users/register">Sign Up</Link>
           <Link to="/users/login">Sign In</Link>
           <Link to="/lists">Lists</Link>
+          <Link to="/users/logout" onClick={this.signOut}>Sign Out</Link>
         </main>
 
-        <Route exact path="/" component={Landing} />
-        <AuthenticateComponent>
-          <Route exact path="/lists" render={() => <Lists lists={lists} />} />
-        </AuthenticateComponent>
-        <Route path="/lists/:id" render={(props) => <ListView lists={lists} {...props}/>} />
-        <Route path="/users/register" component={SignUp} />
-        <Route path="/users/login" component={SignIn} />
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route path="/users/login" component={SignIn} />
+          <Route path="/users/register" component={SignUp} />
+          <Route path="/users/logout" component={LogOut} />
+          
+          <AuthenticateComponent>
+            <Route exact path="/lists" render={() => <Lists lists={lists} />} />
+            <Route path="/lists/:id" render={(props) => <ListView lists={lists} {...props}/>} />
+          </AuthenticateComponent>
+          
+          {/* <PrivateRoute path="/lists" render={(props) => <Lists user={this.state.user} lists={lists} {...props}/>} /> */}
+
+
+        </Switch>
       </div>
     );
   }

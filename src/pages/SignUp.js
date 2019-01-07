@@ -12,21 +12,9 @@ class SignUp extends React.Component {
         }
     }
 
-    handleEmailChange = (e) => {
+    handleInputChange = (e) => {
         this.setState({
-            email: e.target.value
-        })
-    }
-
-    handlePasswordChange = (e) => {
-        this.setState({
-            password: e.target.value
-        })
-    }
-
-    handlePasswordConfirmChange = (e) => {
-        this.setState({
-            confirmPassword: e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
@@ -88,11 +76,11 @@ class SignUp extends React.Component {
                 {this.renderRedirect()}
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="email">Email: </label>
-                    <input type="email" placeholder="Enter an email" value={this.state.email} onChange={this.handleEmailChange}></input>
+                    <input type="email" name="email" placeholder="Enter an email" value={this.state.email} onChange={this.handleEmailChange}></input>
                     <label htmlFor="password">Password: </label>
-                    <input type="password" placeholder="Enter an password" value={this.state.password} onChange={this.handlePasswordChange}></input>
+                    <input type="password" name="password" placeholder="Enter an password" value={this.state.password} onChange={this.handlePasswordChange}></input>
                     <label htmlFor="confirmPassword">Password: </label>
-                    <input type="password" placeholder="Enter an password" value={this.state.confirmPassword} onChange={this.handlePasswordConfirmChange}></input>
+                    <input type="password" name="confirmPassword" placeholder="Enter an password" value={this.state.confirmPassword} onChange={this.handlePasswordConfirmChange}></input>
                     <button type="submit">Sign Up</button>
                 </form>
             </div>

@@ -1,34 +1,45 @@
 import React from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
 import { getJWT } from '../helpers/jwt'
 
 class AuthenticateComponent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            user: undefined
+            user: undefined,
+            jwt: true
         }
     }
 
+    
     componentDidMount() {
         const jwt = getJWT();
         if (!jwt) {
-            console.log('redirect to login')
+            this.setState({ jwt: false})
+        } else {
+            fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
+            .then(res => {
+                res.json().then(user => this.setState({user: user.id}))
+            })
+            .catch(err => {
+                localStorage.removeItem('JWT');
+                this.setState({ jwt: false})
+            })
         }
-
-        fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
-        .then(res => {
-            console.log('we got here')
-            res.json().then(user => this.setState({user: user.email}))
-        })
-        .catch(err => {
-            localStorage.removeItem('JWT');
-            console.log('whatevs')
-        })
+        
     }
 
     render() {
-        if (this.state.user === undefined) {
-            return <div><h1>Loading...</h1></div>
+        if (this.state.user === undefined && this.state.jwt) {
+            return (
+                <div>
+                    <h1>Loading...</h1>
+                </div>
+            )
+        }   
+        
+        if (!this.state.jwt) {
+            return <Redirect to="/users/login" />
         }
 
         return (
