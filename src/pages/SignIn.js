@@ -1,12 +1,13 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            redirect: false
         }
     }
 
@@ -17,7 +18,15 @@ class SignIn extends React.Component {
         })
     }
     
-    
+    triggerRender = () => {
+        this.setState({ redirect: true })
+    }
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/' />
+        }
+    }
+
     onSubmit = (e) => {
         e.preventDefault();
         fetch('http://localhost:5000/users/login', {
@@ -31,8 +40,13 @@ class SignIn extends React.Component {
             })
         })
         .then(user => {
-            user.json().then(result => localStorage.setItem('JWT', result.token))
-        })
+            user.json().then(result => {
+                localStorage.setItem('JWT', result.token)
+                this.props.updateUser({user: result.user})
+                this.props.updateJwt({ jwt: true})
+                this.triggerRender();
+            }
+        )})
         .catch(err => {
             console.log(err)
         })
@@ -41,6 +55,7 @@ class SignIn extends React.Component {
     render() {
         return(
             <div>
+                {this.renderRedirect()}
                 <form onSubmit={this.onSubmit}>
                     <label htmlFor="email">Email:</label>
                     <input type="email" name="email" onChange={this.handleInputChange} placeholder="Enter email"></input>

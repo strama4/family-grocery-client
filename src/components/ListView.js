@@ -1,14 +1,15 @@
 import React from 'react';
 import ListTitle from './ListTitle';
+import TaskItem from './TaskItem';
 
 class ListView extends React.Component {
     
     render() {
-
-        if (!this.props.lists) return <p>Loading</p>
+        const { lists, match } = this.props;
+        if (!lists) return <p>Loading</p>
         
-        const listId = parseInt(this.props.match.params.id);
-        const list = JSON.parse(this.props.lists).find(list => list.id === listId);
+        const listId = parseInt(match.params.id);
+        const list = lists.find(list => list.id === listId);
 
         
         return (
@@ -16,7 +17,7 @@ class ListView extends React.Component {
                 <ListTitle title={list.title}/>
                 {
                     list.items.map(item => (
-                        <li>{item.item} Got it?: {item.completed ? 'Yup': 'Nope'}</li>
+                        <TaskItem item={item.item} isCompleted={item.completed} />
                     ))
                 }
             </div>

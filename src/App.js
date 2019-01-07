@@ -10,22 +10,32 @@ import SignIn from './pages/SignIn';
 import LogOut from './components/SignOut';
 import AuthenticateComponent from './components/AuthenticateComponent';
 import { getJWT } from './helpers/jwt';
+import Protected from './components/Protected';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiResponse: "",
-      user: undefined
+      userLists: "",
+      user: null,
+      jwt: true
     }
   }
 
   async callAPI() {
-    const listData = await fetch('http://localhost:5000/lists')
-                      .then(res => res.text())
-                      .then(res => JSON.parse(res));
-
-    const userData = listData.filter(list => list.userId === this.user)
+    const jwt = getJWT();
+        if (!jwt) {
+            this.setState({ jwt: false})
+        } else {
+            fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
+            .then(res => {
+                res.json().then(user => this.setState({user}), this.getUserLists())
+            })
+            .catch(err => {
+                localStorage.removeItem('JWT');
+                this.setState({ jwt: false})
+            })
+        }
   }
 
   signOut = () => {
@@ -33,14 +43,27 @@ class App extends Component {
     this.setState({ user: undefined }, () => console.log(this.state))
   }
 
-  componentDidMount() {
-    this.callAPI();
+  updateUser = (user) => {
+    this.setState(user)
+  }
 
-    
+  updateJwt = (jwt) => {
+    this.setState({ jwt })
+  }
+
+  getUserLists = () => {
+    fetch(`http://localhost:5000/lists/${this.state.user.userId}`)
+    .then(res => {
+      res.json().then(data => this.setState({ userLists: data}))
+    })
+  }
+
+  async componentDidMount() {
+    await this.callAPI();
   }
   
   render() {
-    const lists = this.state.apiResponse;
+    const { userLists, user, jwt } = this.state;
 
     return (
       <div className="App">
@@ -51,17 +74,19 @@ class App extends Component {
           <Link to="/users/login">Sign In</Link>
           <Link to="/lists">Lists</Link>
           <Link to="/users/logout" onClick={this.signOut}>Sign Out</Link>
+          <Link to="/protected">Protected</Link>
         </main>
 
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/users/login" component={SignIn} />
+          <Route path="/users/login" render={(props) => <SignIn updateUser={this.updateUser} updateJwt={this.updateJwt} {...props} />} />
           <Route path="/users/register" component={SignUp} />
           <Route path="/users/logout" component={LogOut} />
           
-          <AuthenticateComponent>
-            <Route exact path="/lists" render={() => <Lists lists={lists} />} />
-            <Route path="/lists/:id" render={(props) => <ListView lists={lists} {...props}/>} />
+          <AuthenticateComponent user={user} jwt={jwt} updateUser={this.updateUser} updateJwt={this.updateJwt}>
+            <Route exact path="/lists" render={() => <Lists lists={userLists} />} />
+            <Route path="/lists/:id" render={(props) => <ListView lists={userLists} {...props}/>} />
+            <Route path="/protected" component={Protected} />
           </AuthenticateComponent>
           
           {/* <PrivateRoute path="/lists" render={(props) => <Lists user={this.state.user} lists={lists} {...props}/>} /> */}

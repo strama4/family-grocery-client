@@ -3,47 +3,55 @@ import { Redirect, withRouter } from 'react-router-dom';
 import { getJWT } from '../helpers/jwt'
 
 class AuthenticateComponent extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            user: undefined,
-            jwt: true
+            redirect: false
+        }
+    }
+    triggerRedirect = () => {
+        this.setState({ redirect: true})
+    }
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to="/users/login" />
         }
     }
 
-    
     componentDidMount() {
         const jwt = getJWT();
         if (!jwt) {
-            this.setState({ jwt: false})
+            this.props.updateJwt({ jwt: false});
+            this.triggerRedirect();
+
         } else {
             fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
             .then(res => {
-                res.json().then(user => this.setState({user: user.id}))
+                res.json().then(user => this.props.updateUser({user}))
             })
             .catch(err => {
                 localStorage.removeItem('JWT');
-                this.setState({ jwt: false})
+                this.props.updateJwt({ jwt: false})
             })
         }
+        this.setState({ userConfirmed: true });
         
     }
 
     render() {
-        if (this.state.user === undefined && this.state.jwt) {
+        if (!this.props.jwt) {
             return (
                 <div>
+                    {this.renderRedirect()}
                     <h1>Loading...</h1>
                 </div>
             )
         }   
-        
-        if (!this.state.jwt) {
-            return <Redirect to="/users/login" />
-        }
 
         return (
             <div>
+                {this.renderRedirect()}
                 {this.props.children}
             </div>
         )

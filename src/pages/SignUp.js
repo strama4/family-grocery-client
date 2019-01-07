@@ -26,7 +26,7 @@ class SignUp extends React.Component {
 
     renderRedirect = () => {
         if (this.state.redirect) {
-            return <Redirect to='/users/login' />
+            return <Redirect to='/' />
         }
     }
 
@@ -57,7 +57,6 @@ class SignUp extends React.Component {
             })
             .then(result => {
                 if (result.status === 200) {
-                    console.log(result.json().then(res => console.log(res)))
                     this.handleRedirect();
                 }
                 if (result.status === 500) {
@@ -76,11 +75,11 @@ class SignUp extends React.Component {
                 {this.renderRedirect()}
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="email">Email: </label>
-                    <input type="email" name="email" placeholder="Enter an email" value={this.state.email} onChange={this.handleEmailChange}></input>
+                    <input type="email" name="email" placeholder="Enter an email" value={this.state.email} onChange={this.handleInputChange}></input>
                     <label htmlFor="password">Password: </label>
-                    <input type="password" name="password" placeholder="Enter an password" value={this.state.password} onChange={this.handlePasswordChange}></input>
+                    <input type="password" name="password" placeholder="Enter an password" value={this.state.password} onChange={this.handleInputChange}></input>
                     <label htmlFor="confirmPassword">Password: </label>
-                    <input type="password" name="confirmPassword" placeholder="Enter an password" value={this.state.confirmPassword} onChange={this.handlePasswordConfirmChange}></input>
+                    <input type="password" name="confirmPassword" placeholder="Enter an password" value={this.state.confirmPassword} onChange={this.handleInputChange}></input>
                     <button type="submit">Sign Up</button>
                 </form>
             </div>
