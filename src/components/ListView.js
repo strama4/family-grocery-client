@@ -1,6 +1,7 @@
 import React from 'react';
 import ListTitle from './ListTitle';
 import TaskItem from './TaskItem';
+import AddItem from './AddItem';
 
 class ListView extends React.Component {
     
@@ -20,6 +21,7 @@ class ListView extends React.Component {
                         <TaskItem item={item.item} isCompleted={item.completed} />
                     ))
                 }
+                <AddItem listId={match.params.id} />
             </div>
         )
     }

@@ -54,7 +54,10 @@ class App extends Component {
   getUserLists = () => {
     fetch(`http://localhost:5000/lists/${this.state.user.userId}`)
     .then(res => {
-      res.json().then(data => this.setState({ userLists: data}))
+      res.json().then(data => {
+        console.log('Lists found: ', data)
+        this.setState({ userLists: data})
+      })
     })
   }
 
