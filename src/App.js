@@ -11,6 +11,8 @@ import LogOut from './components/SignOut';
 import AuthenticateComponent from './components/AuthenticateComponent';
 import { getJWT } from './helpers/jwt';
 import Protected from './components/Protected';
+const io = require('socket.io-client');
+const socket = io.connect('http://localhost:5000');
 
 class App extends Component {
   constructor(props) {
@@ -61,6 +63,11 @@ class App extends Component {
     })
   }
 
+  getUserListsWebSocket = () => {
+    socket.on('updatedTasks', (data) => {
+
+    })
+  }
   async componentDidMount() {
     await this.callAPI();
   }
