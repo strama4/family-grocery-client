@@ -18,7 +18,7 @@ class SignIn extends React.Component {
         })
     }
     
-    triggerRender = () => {
+    triggerRedirect = () => {
         this.setState({ redirect: true })
     }
     renderRedirect = () => {
@@ -42,9 +42,9 @@ class SignIn extends React.Component {
         .then(user => {
             user.json().then(result => {
                 localStorage.setItem('JWT', result.token)
-                this.props.updateUser({user: result.user})
+                this.props.updateUser({user: result.userId})
                 this.props.updateJwt({ jwt: true})
-                this.triggerRender();
+                this.triggerRedirect();
             }
         )})
         .catch(err => {

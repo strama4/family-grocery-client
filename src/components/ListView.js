@@ -14,15 +14,22 @@ class ListView extends React.Component {
         }
     }
     handleSubmit = listId => e => {
-        console.log(e)
         e.preventDefault();
         const newItem = document.querySelector("input[name='newItem'");
-        socket.emit('message', {
+        socket.emit('addedItem', {
                     item: newItem.value,
                     completed: false,
                     listId: parseInt(listId)
                 }
         );
+    }
+
+    handleDelete = listId => e => {
+
+    }
+
+    handleChecked = listId => e => {
+
     }
                 
                     
@@ -60,7 +67,7 @@ class ListView extends React.Component {
                 <ListTitle title={list.title}/>
                 {
                     list.items.map(item => (
-                        <TaskItem item={item.item} isCompleted={item.completed} />
+                        <TaskItem item={item.item} isCompleted={item.completed} handleDelete={this.handleDelete}/>
                     ))
                 }
                 <AddItem handleSubmit={(listId) => this.handleSubmit(listId)} listId={match.params.id} />

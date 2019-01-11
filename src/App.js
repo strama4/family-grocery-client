@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Link, Route, Redirect, withRouter } from 'react-router-dom';
 import { Switch } from 'react-router';
 import './App.css';
 import Landing from './pages/Landing';
@@ -10,7 +10,6 @@ import SignIn from './pages/SignIn';
 import LogOut from './components/SignOut';
 import AuthenticateComponent from './components/AuthenticateComponent';
 import { getJWT } from './helpers/jwt';
-import Protected from './components/Protected';
 const io = require('socket.io-client');
 const socket = io.connect('http://localhost:5000');
 
@@ -31,7 +30,13 @@ class App extends Component {
         } else {
             fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
             .then(res => {
-                res.json().then(user => this.setState({user}), this.getUserLists())
+                res.json().then(user => {
+                  this.setState({user: user.userId})
+                  console.log('FIND USER', user)
+                })
+            })
+            .then(() => {
+              this.getUserLists();
             })
             .catch(err => {
                 localStorage.removeItem('JWT');
@@ -42,7 +47,7 @@ class App extends Component {
 
   signOut = () => {
     localStorage.removeItem('JWT');
-    this.setState({ user: undefined }, () => console.log(this.state))
+    this.setState({ user: undefined, userLists: "" })
   }
 
   updateUser = (user) => {
@@ -54,7 +59,7 @@ class App extends Component {
   }
 
   getUserLists = () => {
-    fetch(`http://localhost:5000/lists/${this.state.user.userId}`)
+    fetch(`http://localhost:5000/lists/${this.state.user}`)
     .then(res => {
       res.json().then(data => {
         console.log('Lists found: ', data)
@@ -77,6 +82,7 @@ class App extends Component {
 
     return (
       <div className="App">
+        {console.log('STATE', this.state)}
         <main className="container">
           {/* stick in a nav here */}
           <Link to="/">Home</Link>
@@ -84,24 +90,18 @@ class App extends Component {
           <Link to="/users/login">Sign In</Link>
           <Link to="/lists">Lists</Link>
           <Link to="/users/logout" onClick={this.signOut}>Sign Out</Link>
-          <Link to="/protected">Protected</Link>
         </main>
 
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/users/login" render={(props) => <SignIn updateUser={this.updateUser} updateJwt={this.updateJwt} {...props} />} />
+          <Route path="/users/login" render={(props) => <SignIn getUserLists={this.getUserLists} updateUser={this.updateUser} updateJwt={this.updateJwt} {...props} />} />
           <Route path="/users/register" component={SignUp} />
           <Route path="/users/logout" component={LogOut} />
           
-          <AuthenticateComponent user={user} jwt={jwt} updateUser={this.updateUser} updateJwt={this.updateJwt}>
+          <AuthenticateComponent user={user} jwt={jwt} updateUser={this.updateUser} updateJwt={this.updateJwt} updateLists={this.getUserLists}>
             <Route exact path="/lists" render={() => <Lists lists={userLists} />} />
             <Route path="/lists/:id" render={(props) => <ListView lists={userLists} {...props}/>} />
-            <Route path="/protected" component={Protected} />
           </AuthenticateComponent>
-          
-          {/* <PrivateRoute path="/lists" render={(props) => <Lists user={this.state.user} lists={lists} {...props}/>} /> */}
-
-
         </Switch>
       </div>
     );
