@@ -29,7 +29,7 @@ class SignIn extends React.Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        fetch('http://family-grocery-api.herokuapp.com/users/login', {
+        fetch('https://family-grocery-api.herokuapp.com/users/login', {
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
