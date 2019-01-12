@@ -3,7 +3,7 @@ import ListTitle from './ListTitle';
 import TaskItem from './TaskItem';
 import AddItem from './AddItem';
 const io = require('socket.io-client');
-const socket = io.connect('http://localhost:5000/');
+const socket = io.connect('http://family-grocery-api.herokuapps.com/');
 
 class ListView extends React.Component {
     constructor(props) {
