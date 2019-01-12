@@ -3,7 +3,7 @@ import ListTitle from '../components/ListTitle';
 import { Link } from 'react-router-dom';
 import AddItem from "../components/AddItem";
 const io = require('socket.io-client');
-const socket = io.connect('http://family-grocery-api.herokuapps.com');
+const socket = io.connect('http://family-grocery-api.herokuapp.com');
 
 class Lists extends React.Component {
     constructor(props) {

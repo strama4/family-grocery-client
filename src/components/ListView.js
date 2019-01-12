@@ -3,7 +3,7 @@ import ListTitle from './ListTitle';
 import TaskItem from './TaskItem';
 import AddItem from './AddItem';
 const io = require('socket.io-client');
-const socket = io.connect('http://family-grocery-api.herokuapps.com/');
+const socket = io.connect('http://family-grocery-api.herokuapp.com/');
 
 class ListView extends React.Component {
     constructor(props) {
@@ -39,7 +39,7 @@ class ListView extends React.Component {
     }
             
     getListItems = () => {
-        fetch(`http://family-grocery-api.herokuapps.com/lists/${this.state.listId}`)
+        fetch(`http://family-grocery-api.herokuapp.com/lists/${this.state.listId}`)
         .then(res => res.json())
         .then(data => {
             this.setState({ list: data })
