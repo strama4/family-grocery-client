@@ -26,7 +26,6 @@ class AuthenticateComponent extends React.Component {
             this.triggerRedirect();
 
         } else {
-            console.log('got here')
             fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
             .then(res => {
                 res.json().then(user => this.props.updateUser({user: user.userId}))

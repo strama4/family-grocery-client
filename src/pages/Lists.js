@@ -1,11 +1,43 @@
 import React from "react";
 import ListTitle from '../components/ListTitle';
 import { Link } from 'react-router-dom';
+import AddItem from "../components/AddItem";
+const io = require('socket.io-client');
+const socket = io.connect('http://localhost:5000');
 
 class Lists extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            lists: ''
+        }
+    }
+    // getUserLists = () => {
+    //     fetch(`http://localhost:5000/lists/`)
+    //     .then(res => {
+    //         res.json().then(data => {
+    //         const lists = data.filter(list => list.userId === this.props.user)
+    //             this.setState({ lists })
+    //         })
+    //     })
+    // }
     
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const newListValue = document.querySelector("input[name='newItem']").value;
+        console.log(newListValue)
+        socket.emit('addedList', {title: newListValue, userId: this.props.user});
+    }
+
+    componentDidMount = () => {
+        // this.getUserLists()
+        socket.emit('getUserList', this.props.user);
+        socket.on('updatedUserLists', (data) => {
+            this.setState({ lists: data})
+        })
+    }
     render() {
-        const { lists } = this.props;
+        const { lists } = this.state;
         if (!lists) return <p>Loading...</p>
         return (             
             <div>
@@ -14,6 +46,7 @@ class Lists extends React.Component {
                         <ListTitle key={list.id} title={list.title} />
                     </Link>
                 ))}
+                <AddItem type={"List"} handleSubmit={this.handleSubmit} />
             </div>
         )
     }

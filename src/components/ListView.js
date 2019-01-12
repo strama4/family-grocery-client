@@ -10,67 +10,66 @@ class ListView extends React.Component {
         super(props);
         this.state = {
             listReceived: false,
-            list: null
+            list: null,
+            listId: this.props.match.params.id
         }
     }
-    handleSubmit = listId => e => {
+    handleSubmit = e => {
         e.preventDefault();
         const newItem = document.querySelector("input[name='newItem'");
         socket.emit('addedItem', {
-                    item: newItem.value,
-                    completed: false,
-                    listId: parseInt(listId)
+                    description: newItem.value,
+                    listId: parseInt(this.state.listId)
                 }
         );
+        newItem.value = "";
     }
 
-    handleDelete = listId => e => {
-
+    handleDelete = (e) => {
+        const itemId = e.target.dataset.index
+        socket.emit('deletedItem', {id: itemId, listId: this.state.listId})
     }
-
-    handleChecked = listId => e => {
-
+    
+    handleChecked = (e) => {
+        const itemId = e.target.dataset.index;
+        const updatedStatus = document.querySelector(`input[data-index='${itemId}']`).checked;
+        console.log(updatedStatus)
+        const item = {id: itemId, status: updatedStatus}
+        socket.emit('updateItem', { item, listId: this.state.listId})
     }
-                
+            
+    getListItems = () => {
+        fetch(`http://localhost:5000/lists/${this.state.listId}`)
+        .then(res => res.json())
+        .then(data => {
+            this.setState({ list: data })
+        })
+    }
                     
     componentDidMount = () => {
-        socket.on('updatedTasks', (list) => { this.setState({ 
-            listReceived: true,
-            list: list
-         })})
+        this.getListItems();
+        socket.on('updatedTasks', (list) => { 
+            this.setState({ 
+                listReceived: true,
+                list: list
+            })
+        })
     }               
                 
         
 
     render() {
-        const { lists, match } = this.props;
-        if (!lists) return <p>Loading</p>
-        
-        const listId = parseInt(match.params.id);
-        const list = lists.find(list => list.id === listId);
-
-        if (this.state.list) {
-            return (
-                <div>
-                <ListTitle title={list.title}/>
-                {
-                    this.state.list.items.map(item => (
-                        <TaskItem item={item.item} isCompleted={item.completed} />
-                    ))
-                }
-                <AddItem handleSubmit={(listId) => this.handleSubmit(listId)} listId={match.params.id} />
-            </div>
-            )
-        }
+        const { list } = this.state;
+        if (!list) return <p>Loading</p>
         return (
             <div>
-                <ListTitle title={list.title}/>
+                <ListTitle title={list.title} />
                 {
                     list.items.map(item => (
-                        <TaskItem item={item.item} isCompleted={item.completed} handleDelete={this.handleDelete}/>
+                        <TaskItem key={item.id} index={item.id} item={item.description} isCompleted={item.complete} handleDelete={this.handleDelete} handleChecked={this.handleChecked}/>
                     ))
                 }
-                <AddItem handleSubmit={(listId) => this.handleSubmit(listId)} listId={match.params.id} />
+                <AddItem type="Item" handleSubmit={this.handleSubmit} />
             </div>
         )
     }

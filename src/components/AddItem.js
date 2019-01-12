@@ -4,12 +4,12 @@ import React from 'react';
 class AddItem extends React.Component {
     
     render() {
-        const { handleSubmit, listId } = this.props;
+        const { handleSubmit, type } = this.props;
         return ( 
             <div>
-                <form onSubmit={handleSubmit(listId)}>
-                    <input name="newItem" type="text" placeholder="Add an item" />
-                    <button type="submit">Add</button>
+                <form onSubmit={handleSubmit}>
+                    <input name="newItem" type="text" placeholder={`Enter ${type} description`} />
+                    <button type="submit">Add {type}</button>
                 </form>
             </div>
         )

@@ -10,8 +10,6 @@ import SignIn from './pages/SignIn';
 import LogOut from './components/SignOut';
 import AuthenticateComponent from './components/AuthenticateComponent';
 import { getJWT } from './helpers/jwt';
-const io = require('socket.io-client');
-const socket = io.connect('http://localhost:5000');
 
 class App extends Component {
   constructor(props) {
@@ -32,12 +30,11 @@ class App extends Component {
             .then(res => {
                 res.json().then(user => {
                   this.setState({user: user.userId})
-                  console.log('FIND USER', user)
                 })
             })
-            .then(() => {
-              this.getUserLists();
-            })
+            // .then(() => {
+            //   this.getUserLists();
+            // })
             .catch(err => {
                 localStorage.removeItem('JWT');
                 this.setState({ jwt: false})
@@ -58,21 +55,16 @@ class App extends Component {
     this.setState({ jwt })
   }
 
-  getUserLists = () => {
-    fetch(`http://localhost:5000/lists/${this.state.user}`)
-    .then(res => {
-      res.json().then(data => {
-        console.log('Lists found: ', data)
-        this.setState({ userLists: data})
-      })
-    })
-  }
+  // getUserLists = () => {
+  //   fetch(`http://localhost:5000/lists/`)
+  //   .then(res => {
+  //     res.json().then(data => {
+  //       const userLists = data.filter(list => list.userId === this.state.user)
+  //       this.setState({ userLists })
+  //     })
+  //   })
+  // }
 
-  getUserListsWebSocket = () => {
-    socket.on('updatedTasks', (data) => {
-
-    })
-  }
   async componentDidMount() {
     await this.callAPI();
   }
@@ -82,7 +74,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        {console.log('STATE', this.state)}
         <main className="container">
           {/* stick in a nav here */}
           <Link to="/">Home</Link>
@@ -99,7 +90,7 @@ class App extends Component {
           <Route path="/users/logout" component={LogOut} />
           
           <AuthenticateComponent user={user} jwt={jwt} updateUser={this.updateUser} updateJwt={this.updateJwt} updateLists={this.getUserLists}>
-            <Route exact path="/lists" render={() => <Lists lists={userLists} />} />
+            <Route exact path="/lists" render={() => <Lists user={user} />} />
             <Route path="/lists/:id" render={(props) => <ListView lists={userLists} {...props}/>} />
           </AuthenticateComponent>
         </Switch>
