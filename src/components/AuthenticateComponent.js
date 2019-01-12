@@ -30,9 +30,9 @@ class AuthenticateComponent extends React.Component {
             .then(res => {
                 res.json().then(user => this.props.updateUser({user: user.userId}))
             })
-            .then(() => {
-                this.props.updateLists();
-            })
+            // .then(() => {
+            //     this.props.updateLists();
+            // })
             .catch(err => {
                 localStorage.removeItem('JWT');
                 this.props.updateJwt({ jwt: false})
