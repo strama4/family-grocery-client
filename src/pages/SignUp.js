@@ -44,7 +44,7 @@ class SignUp extends React.Component {
                 email: ''
             });
         } else {
-            fetch('http://localhost:5000/users/register', {
+            fetch('http://family-grocery-api.herokuapps.com/users/register', {
                 method: "POST",
                 headers: {
                     'Content-type': 'application/json'

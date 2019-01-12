@@ -39,7 +39,7 @@ class ListView extends React.Component {
     }
             
     getListItems = () => {
-        fetch(`http://localhost:5000/lists/${this.state.listId}`)
+        fetch(`http://family-grocery-api.herokuapps.com/lists/${this.state.listId}`)
         .then(res => res.json())
         .then(data => {
             this.setState({ list: data })

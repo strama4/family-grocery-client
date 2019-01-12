@@ -26,7 +26,7 @@ class App extends Component {
         if (!jwt) {
             this.setState({ jwt: false})
         } else {
-            fetch('http://localhost:5000/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
+            fetch('http://family-grocery-api.herokuapps.com/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
             .then(res => {
                 res.json().then(user => {
                   this.setState({user: user.userId})
