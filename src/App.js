@@ -90,7 +90,7 @@ class App extends Component {
           <Route path="/users/logout" component={LogOut} />
           
           <AuthenticateComponent user={user} jwt={jwt} updateUser={this.updateUser} updateJwt={this.updateJwt} >
-            <Route exact path="/lists" render={() => <Lists user={user} {...props}/>} />
+            <Route exact path="/lists" render={(props) => <Lists user={user} {...props}/>} />
             <Route path="/lists/:id" render={(props) => <ListView lists={userLists} {...props}/>} />
           </AuthenticateComponent>
         </Switch>
