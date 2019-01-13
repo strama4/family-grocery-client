@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter, Redirect } from 'react-router-dom';
+import { loginUser } from '../apiAdapter';
 
 class SignIn extends React.Component {
     constructor(props) {
@@ -29,7 +30,7 @@ class SignIn extends React.Component {
 
     onSubmit = (e) => {
         e.preventDefault();
-        fetch('https://family-grocery-api.herokuapp.com/users/login', {
+        loginUser({
             method: "POST",
             headers: {
                 'Content-type': 'application/json'

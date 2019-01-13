@@ -2,8 +2,9 @@ import React from "react";
 import ListTitle from '../components/ListTitle';
 import { Link } from 'react-router-dom';
 import AddItem from "../components/AddItem";
+import { getApiURL } from '../apiAdapter';
 const io = require('socket.io-client');
-const socket = io.connect('https://family-grocery-api.herokuapp.com');
+const socket = io.connect(getApiURL());
 
 class Lists extends React.Component {
     constructor(props) {

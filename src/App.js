@@ -10,6 +10,7 @@ import SignIn from './pages/SignIn';
 import LogOut from './components/SignOut';
 import AuthenticateComponent from './components/AuthenticateComponent';
 import { getJWT } from './helpers/jwt';
+import {fetchUser} from './apiAdapter';
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class App extends Component {
         if (!jwt) {
             this.setState({ jwt: false})
         } else {
-            fetch('https://family-grocery-api.herokuapp.com/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
+            fetchUser({ headers: { Authorization: `Bearer ${jwt}`}})
             .then(res => {
                 res.json().then(user => {
                   this.setState({user: user.userId})

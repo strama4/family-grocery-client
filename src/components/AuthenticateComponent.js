@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import { getJWT } from '../helpers/jwt'
+import { fetchUser } from '../apiAdapter';
 
 class AuthenticateComponent extends React.Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class AuthenticateComponent extends React.Component {
             this.triggerRedirect();
 
         } else {
-            fetch('https://family-grocery-api.herokuapp.com/users/findUser', { headers: { Authorization: `Bearer ${jwt}`}})
+            fetchUser({ headers: { Authorization: `Bearer ${jwt}`}})
             .then(res => {
                 res.json().then(user => this.props.updateUser({user: user.userId}))
             })

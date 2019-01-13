@@ -2,8 +2,9 @@ import React from 'react';
 import ListTitle from './ListTitle';
 import TaskItem from './TaskItem';
 import AddItem from './AddItem';
+import { getApiURL, fetchListItems } from '../apiAdapter';
 const io = require('socket.io-client');
-const socket = io.connect('https://family-grocery-api.herokuapp.com/');
+const socket = io.connect(getApiURL());
 
 class ListView extends React.Component {
     constructor(props) {
@@ -33,13 +34,12 @@ class ListView extends React.Component {
     handleChecked = (e) => {
         const itemId = e.target.dataset.index;
         const updatedStatus = document.querySelector(`input[data-index='${itemId}']`).checked;
-        console.log(updatedStatus)
         const item = {id: itemId, status: updatedStatus}
         socket.emit('updateItem', { item, listId: this.state.listId})
     }
             
     getListItems = () => {
-        fetch(`https://family-grocery-api.herokuapp.com/lists/${this.state.listId}`)
+        fetchListItems(this.state.listId)
         .then(res => res.json())
         .then(data => {
             this.setState({ list: data })
@@ -55,8 +55,6 @@ class ListView extends React.Component {
             })
         })
     }               
-                
-        
 
     render() {
         const { list } = this.state;

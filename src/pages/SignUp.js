@@ -1,5 +1,6 @@
 import React from 'react';
-import { Redirect } from 'react-router'
+import { Redirect } from 'react-router';
+import { registerUser } from '../apiAdapter';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -44,7 +45,9 @@ class SignUp extends React.Component {
                 email: ''
             });
         } else {
-            fetch('https://family-grocery-api.herokuapp.com/users/register', {
+            console.log(registerUser())
+
+            registerUser({
                 method: "POST",
                 headers: {
                     'Content-type': 'application/json'
@@ -55,6 +58,7 @@ class SignUp extends React.Component {
                     confirmPassword: this.state.confirmPassword
                 }),
             })
+            
             .then(result => {
                 if (result.status === 200) {
                     this.handleRedirect();
