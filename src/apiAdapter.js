@@ -1,11 +1,10 @@
 let API_URL = 'http://localhost:5000' 
-
+// https://family-grocery-api.herokuapp.com
 export const fetchUser = (headers) => {
     return fetch(`${API_URL}/users/findUser`, headers)
 }    
 
 export const registerUser = (headers) => {
-    console.log('APIURL', process.env.REACT_APP_STAGE)
     return fetch(`${API_URL}/users/register`, headers)
 }
 

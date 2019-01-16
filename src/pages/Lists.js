@@ -44,7 +44,7 @@ class Lists extends React.Component {
             <div>
                 {lists.map((list, index) => (
                     <Link key={index} to={`/lists/${list.id}`}>
-                        <ListTitle key={list.id} title={list.title} />
+                        <ListTitle fontSize={'xxlarge'} key={list.id} title={list.title} />
                     </Link>
                 ))}
                 <AddItem type={"List"} handleSubmit={this.handleSubmit} />

@@ -45,8 +45,6 @@ class SignUp extends React.Component {
                 email: ''
             });
         } else {
-            console.log(registerUser())
-
             registerUser({
                 method: "POST",
                 headers: {
@@ -79,12 +77,12 @@ class SignUp extends React.Component {
                 {this.renderRedirect()}
                 <form onSubmit={this.handleSubmit}>
                     <label htmlFor="email">Email: </label>
-                    <input type="email" name="email" placeholder="Enter an email" value={this.state.email} onChange={this.handleInputChange}></input>
+                    <input className="w3-input w3-section" type="email" name="email" placeholder="Enter an email" value={this.state.email} onChange={this.handleInputChange}></input>
                     <label htmlFor="password">Password: </label>
-                    <input type="password" name="password" placeholder="Enter an password" value={this.state.password} onChange={this.handleInputChange}></input>
-                    <label htmlFor="confirmPassword">Password: </label>
-                    <input type="password" name="confirmPassword" placeholder="Enter an password" value={this.state.confirmPassword} onChange={this.handleInputChange}></input>
-                    <button type="submit">Sign Up</button>
+                    <input className="w3-input w3-section" type="password" name="password" placeholder="Enter an password" value={this.state.password} onChange={this.handleInputChange}></input>
+                    <label htmlFor="confirmPassword">Confirm Password: </label>
+                    <input className="w3-input w3-section" type="password" name="confirmPassword" placeholder="Enter an password" value={this.state.confirmPassword} onChange={this.handleInputChange}></input>
+                    <button className="w3-button w3-teal" type="submit">Sign Up</button>
                 </form>
             </div>
         )

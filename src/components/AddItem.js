@@ -8,8 +8,8 @@ class AddItem extends React.Component {
         return ( 
             <div>
                 <form onSubmit={handleSubmit}>
-                    <input name="newItem" type="text" placeholder={`Enter ${type} description`} />
-                    <button type="submit">Add {type}</button>
+                    <input className="w3-input w3-margin-top" name="newItem" type="text" placeholder={`Enter ${type} description`} />
+                    <button className="w3-button w3-teal w3-margin-top" type="submit">Add {type}</button>
                 </form>
             </div>
         )

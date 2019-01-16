@@ -59,10 +59,10 @@ class SignIn extends React.Component {
                 {this.renderRedirect()}
                 <form onSubmit={this.onSubmit}>
                     <label htmlFor="email">Email:</label>
-                    <input type="email" name="email" onChange={this.handleInputChange} placeholder="Enter email"></input>
+                    <input className="w3-input w3-section" type="email" name="email" onChange={this.handleInputChange} placeholder="Enter email"></input>
                     <label htmlFor="password">Password:</label>
-                    <input type="password" name="password" onChange={this.handleInputChange} placeholder="Enter password"></input>
-                    <button type="submit">Log In</button>
+                    <input className="w3-input w3-section" type="password" name="password" onChange={this.handleInputChange} placeholder="Enter password"></input>
+                    <button className="w3-button w3-teal" type="submit">Log In</button>
                 </form>
             </div>
 
