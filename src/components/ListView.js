@@ -12,7 +12,9 @@ class ListView extends React.Component {
         this.state = {
             listReceived: false,
             list: null,
-            listId: this.props.match.params.id
+            listId: this.props.match.params.id,
+            showEdit: false,
+
         }
     }
     handleSubmit = e => {
@@ -64,7 +66,7 @@ class ListView extends React.Component {
                 <ListTitle title={list.title} />
                 {
                     list.items.map(item => (
-                        <TaskItem key={item.id} index={item.id} item={item.description} isCompleted={item.complete} handleDelete={this.handleDelete} handleChecked={this.handleChecked}/>
+                        <TaskItem key={item.id} index={item.id} listId={list.id} item={item.description} isCompleted={item.complete} handleDelete={this.handleDelete} handleChecked={this.handleChecked} handleEdit={this.handleEdit}/>
                     ))
                 }
                 <AddItem type="Item" handleSubmit={this.handleSubmit} />
