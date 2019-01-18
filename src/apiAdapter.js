@@ -1,5 +1,6 @@
-let API_URL = 'http://localhost:5000' 
-// https://family-grocery-api.herokuapp.com
+let API_URL = 'https://family-grocery-api.herokuapp.com'
+// 'http://localhost:5000' 
+
 export const fetchUser = (headers) => {
     return fetch(`${API_URL}/users/findUser`, headers)
 }    
